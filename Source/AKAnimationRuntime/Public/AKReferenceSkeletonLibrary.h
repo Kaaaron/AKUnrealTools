@@ -28,7 +28,7 @@ struct PLUGIN_API FBlueprintReferenceSkeleton
 		return ReferenceMesh->GetRefSkeleton();
 	}
 	
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = ReferenceSkeleton)
 	TObjectPtr<USkeletalMesh> ReferenceMesh;
 };
 

@@ -14,7 +14,7 @@ class PLUGIN_API UAKAnimGraphNode_DrawHierarchy : public UAnimGraphNode_Skeletal
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditAnywhere, Category=Settings)
+	UPROPERTY(EditAnywhere, Category = Settings)
 	FAKAnimNode_DrawHierarchy Node;
 	
 	// Begin UAnimGraphNode_Base Interface

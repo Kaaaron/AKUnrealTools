@@ -31,23 +31,23 @@ struct PLUGIN_API FAKAnimNode_DrawHierarchy: public FAnimNode_SkeletalControlBas
 {
 	GENERATED_BODY()
 	
-	UPROPERTY(EditAnywhere, meta = (EditCondition = "Mode != EAKDrawHierarchyMode::WholeHierarchy", EditConditionHides))
+	UPROPERTY(EditAnywhere, meta = (EditCondition = "Mode != EAKDrawHierarchyMode::WholeHierarchy", EditConditionHides, Category = DrawHierarchy))
 	FBoneReference StartBone;
 
 #if WITH_EDITORONLY_DATA
-	UPROPERTY(EditAnywhere, meta = (FoldProperty))
+	UPROPERTY(EditAnywhere, meta = (FoldProperty), Category = DrawHierarchy)
 	EAKDrawHierarchyMode Mode = EAKDrawHierarchyMode::WholeHierarchy;
 	
-	UPROPERTY(EditAnywhere, meta = (FoldProperty))
+	UPROPERTY(EditAnywhere, meta = (FoldProperty), Category = DrawHierarchy)
 	EAKDrawHierarchyStyle Style = EAKDrawHierarchyStyle::Axes; 
 	
-	UPROPERTY(EditAnywhere, meta = (FoldProperty, ClampMin = 0))
+	UPROPERTY(EditAnywhere, meta = (FoldProperty, ClampMin = 0), Category = DrawHierarchy)
 	float Size = 1.f;
 	
-	UPROPERTY(EditAnywhere, meta = (FoldProperty, EditCondition="Style != EAKDrawHierarchyStyle::Axes", EditConditionHides))
+	UPROPERTY(EditAnywhere, meta = (FoldProperty, EditCondition="Style != EAKDrawHierarchyStyle::Axes", EditConditionHides), Category = DrawHierarchy)
 	FColor Color = FColor::Emerald;
 	
-	UPROPERTY(EditAnywhere, meta = (FoldProperty, ClampMin = 0, EditCondition="Mode != EAKDrawHierarchyMode::WholeHierarchy", EditConditionHides))
+	UPROPERTY(EditAnywhere, meta = (FoldProperty, ClampMin = 0, EditCondition="Mode != EAKDrawHierarchyMode::WholeHierarchy", EditConditionHides), Category = DrawHierarchy)
 	int Depth = 0;
 #endif
 

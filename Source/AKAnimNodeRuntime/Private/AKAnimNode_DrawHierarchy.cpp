@@ -24,8 +24,10 @@ void FAKAnimNode_DrawHierarchy::InitializeBoneReferences(const FBoneContainer& R
 	
 	if(!StartBone.Initialize(RequiredBones))
 	{
+#if WITH_EDITOR
 		AddValidationVisualWarning(FText::FromString(FString::Printf(TEXT("Invalid StartBone %s"), 
 			*StartBone.BoneName.ToString())));
+#endif
 	}
 }
 

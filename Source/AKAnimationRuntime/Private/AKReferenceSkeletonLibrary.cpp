@@ -18,16 +18,43 @@ FName UAKReferenceSkeletonLibrary::GetParentBone(const FBlueprintReferenceSkelet
 
 	const FReferenceSkeleton& RefSkel = InReferenceSkeleton.Get();
 
-	FMeshBoneInfo Child = FMeshBoneInfo();
-	Child.Name = InChild;
-	const int ParentIdx = RefSkel.GetRefBoneInfo().Find(Child);
-
-	if (ParentIdx == INDEX_NONE)
+	const int32 ChildIdx = RefSkel.FindBoneIndex(InChild);
+	if (ChildIdx == INDEX_NONE)
 	{
 		return NAME_None;
 	}
 
-	return RefSkel.GetRefBoneInfo()[ParentIdx].Name;
+	const int32 ParentIdx = RefSkel.GetParentIndex(ChildIdx);
+	if (ParentIdx == INDEX_NONE)
+	{
+		return NAME_None;
+	}
+	
+	return RefSkel.GetBoneName(ParentIdx);
+}
+
+void UAKReferenceSkeletonLibrary::GetChildBones(const FBlueprintReferenceSkeleton& InReferenceSkeleton,
+                                                const FName InParent, TArray<FName>& OutChildren)
+{
+	OutChildren.Empty();
+	if (!InReferenceSkeleton.IsValid())
+	{
+		return;
+	}
+
+	const FReferenceSkeleton& RefSkel = InReferenceSkeleton.Get();
+	const int32 ParentIdx = RefSkel.FindBoneIndex(InParent);
+	if (ParentIdx == INDEX_NONE)
+	{
+		return;
+	}
+	TArray<int32> ChildIndices;
+	InReferenceSkeleton.Get().GetDirectChildBones(ParentIdx, ChildIndices);
+
+	Algo::Transform(ChildIndices, OutChildren, [&RefSkel](const int32 Elem) -> FName
+	{
+		return RefSkel.GetBoneName(Elem);
+	});
 }
 
 int UAKReferenceSkeletonLibrary::GetNumBones(const FBlueprintReferenceSkeleton& InReferenceSkeleton)

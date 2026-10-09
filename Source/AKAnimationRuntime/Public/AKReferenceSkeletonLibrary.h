@@ -9,6 +9,7 @@
 #include "AKReferenceSkeletonLibrary.generated.h"
 
 #define PLUGIN_API AKANIMATIONRUNTIME_API
+
 USTRUCT(BlueprintType)
 struct PLUGIN_API FBlueprintReferenceSkeleton
 {
@@ -28,7 +29,7 @@ struct PLUGIN_API FBlueprintReferenceSkeleton
 		return ReferenceMesh->GetRefSkeleton();
 	}
 	
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = ReferenceSkeleton)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = ReferenceSkeleton)
 	TObjectPtr<USkeletalMesh> ReferenceMesh;
 };
 
@@ -49,6 +50,9 @@ class PLUGIN_API UAKReferenceSkeletonLibrary : public UBlueprintFunctionLibrary
 	
 	UFUNCTION(BlueprintPure, Category = "Animation|ReferenceSkeleton")
 	[[nodiscard]] static FName GetParentBone(const FBlueprintReferenceSkeleton& InReferenceSkeleton, const FName InChild);
+	
+	UFUNCTION(BlueprintCallable, Category = "Animation|ReferenceSkeleton")
+	static void GetChildBones(const FBlueprintReferenceSkeleton& InReferenceSkeleton, const FName InParent, TArray<FName>& OutChildren);
 	
 	UFUNCTION(BlueprintPure, Category = "Animation|ReferenceSkeleton")
 	[[nodiscard]] static int GetNumBones(const FBlueprintReferenceSkeleton& InReferenceSkeleton);

@@ -63,7 +63,9 @@ void UAKAnimGraphNode_DrawHierarchy::CopyNodeDataToPreviewNode(FAnimNode_Base* I
 	Super::CopyNodeDataToPreviewNode(InPreviewNode);
 	
 	FAKAnimNode_DrawHierarchy* Preview = static_cast<FAKAnimNode_DrawHierarchy*>(InPreviewNode);
-	FBoneReference OriginalStartBone = Preview->StartBone; // Only piece of mutable data we need to keep on that node
-	memcpy(InPreviewNode, &Node, sizeof(Node));
-	Preview->StartBone = OriginalStartBone;
+	Preview->Mode = Node.Mode;
+	Preview->Style = Node.Style;
+	Preview->Size = Node.Size;
+	Preview->Color = Node.Color;
+	Preview->Depth = Node.Depth;
 }

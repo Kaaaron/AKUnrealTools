@@ -19,7 +19,7 @@ void FAKAnimNode_DrawHierarchy::InitializeBoneReferences(const FBoneContainer& R
 {
 	FAnimNode_SkeletalControlBase::InitializeBoneReferences(RequiredBones);
 	
-	if (GetMode() == EAKDrawHierarchyMode::WholeHierarchy)
+	if (Mode == EAKDrawHierarchyMode::WholeHierarchy)
 		{ return; }
 	
 	if(!StartBone.Initialize(RequiredBones))
@@ -33,7 +33,7 @@ void FAKAnimNode_DrawHierarchy::InitializeBoneReferences(const FBoneContainer& R
 
 bool FAKAnimNode_DrawHierarchy::IsValidToEvaluate(const USkeleton* Skeleton, const FBoneContainer& RequiredBones)
 {
-	if (GetMode() == EAKDrawHierarchyMode::WholeHierarchy)
+	if (Mode == EAKDrawHierarchyMode::WholeHierarchy)
 		{ return RequiredBones.GetNumBones() > 0; }
 	
 	return StartBone.IsValidToEvaluate(RequiredBones);
@@ -58,19 +58,17 @@ void FAKAnimNode_DrawHierarchy::EvaluateSkeletalControl_AnyThread(FComponentSpac
 	}
 	bRequestDraw = false;
 	
-	const EAKDrawHierarchyMode CurrentMode = GetMode();
-	
 	auto DrawBoneIndex = [&](const FCompactPoseBoneIndex& Bone, const FBoneContainer& Hierarchy) -> void
 	{
 		const FTransform Transform = Output.Pose.GetComponentSpaceTransform(Bone) * DrawProxy.GetComponentTransform();
-		switch (GetStyle())
+		switch (Style)
 		{
 			case EAKDrawHierarchyStyle::Axes:
-				DrawProxy.AnimDrawDebugCoordinateSystem(Transform.GetLocation(), Transform.Rotator(), GetSize(), 
+				DrawProxy.AnimDrawDebugCoordinateSystem(Transform.GetLocation(), Transform.Rotator(), Size, 
 					false, -1.f, 1.f, SDPG_Foreground);
 				break;
 			case EAKDrawHierarchyStyle::Points:
-				DrawProxy.AnimDrawDebugPoint(Transform.GetLocation(), GetSize(), GetColor(), 
+				DrawProxy.AnimDrawDebugPoint(Transform.GetLocation(), Size, Color, 
 					false, -1.f, SDPG_Foreground);
 				break;
 			case EAKDrawHierarchyStyle::Lines:
@@ -78,12 +76,12 @@ void FAKAnimNode_DrawHierarchy::EvaluateSkeletalControl_AnyThread(FComponentSpac
 				if (!ParentIdx.IsValid())
 				{ break; }
 				const FTransform Parent = Output.Pose.GetComponentSpaceTransform(ParentIdx)  * DrawProxy.GetComponentTransform();
-				DrawProxy.AnimDrawDebugLine(Transform.GetLocation(), Parent.GetLocation(), GetColor(), 
-					false, -1.f, GetSize(), SDPG_Foreground);
+				DrawProxy.AnimDrawDebugLine(Transform.GetLocation(), Parent.GetLocation(), Color, 
+					false, -1.f, Size, SDPG_Foreground);
 		}
 	};
 	
-	if (CurrentMode == EAKDrawHierarchyMode::WholeHierarchy)
+	if (Mode == EAKDrawHierarchyMode::WholeHierarchy)
 	{
 		for (const FCompactPoseBoneIndex Idx : RequiredBones.ForEachCompactPoseBoneIndex())
 		{
@@ -92,7 +90,7 @@ void FAKAnimNode_DrawHierarchy::EvaluateSkeletalControl_AnyThread(FComponentSpac
 		return;
 	}
 
-	const int CurrentDepth = FMath::Max(GetDepth(), 1);
+	const int CurrentDepth = FMath::Max(Depth, 1);
 	const FCompactPoseBoneIndex StartBoneIdx = StartBone.GetCompactPoseIndex(RequiredBones);
 	
 	auto DrawParents = [&]()->void
@@ -128,7 +126,7 @@ void FAKAnimNode_DrawHierarchy::EvaluateSkeletalControl_AnyThread(FComponentSpac
 		}
 	};
 	
-	switch (CurrentMode)
+	switch (Mode)
 	{
 		case EAKDrawHierarchyMode::ParentsAndChildren:
 			DrawParents();

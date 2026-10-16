@@ -34,37 +34,22 @@ struct PLUGIN_API FAKAnimNode_DrawHierarchy: public FAnimNode_SkeletalControlBas
 	UPROPERTY(EditAnywhere, meta = (EditCondition = "Mode != EAKDrawHierarchyMode::WholeHierarchy", EditConditionHides, Category = DrawHierarchy))
 	FBoneReference StartBone;
 
-#if WITH_EDITORONLY_DATA
-	UPROPERTY(EditAnywhere, meta = (FoldProperty), Category = DrawHierarchy)
+	UPROPERTY(EditAnywhere, Category = DrawHierarchy)
 	EAKDrawHierarchyMode Mode = EAKDrawHierarchyMode::WholeHierarchy;
 	
-	UPROPERTY(EditAnywhere, meta = (FoldProperty), Category = DrawHierarchy)
+	UPROPERTY(EditAnywhere, Category = DrawHierarchy)
 	EAKDrawHierarchyStyle Style = EAKDrawHierarchyStyle::Axes; 
 	
-	UPROPERTY(EditAnywhere, meta = (FoldProperty, ClampMin = 0), Category = DrawHierarchy)
+	UPROPERTY(EditAnywhere, meta = (ClampMin = 0), Category = DrawHierarchy)
 	float Size = 1.f;
 	
-	UPROPERTY(EditAnywhere, meta = (FoldProperty, EditCondition="Style != EAKDrawHierarchyStyle::Axes", EditConditionHides), Category = DrawHierarchy)
+	UPROPERTY(EditAnywhere, meta = (EditCondition="Style != EAKDrawHierarchyStyle::Axes", EditConditionHides), Category = DrawHierarchy)
 	FColor Color = FColor::Emerald;
 	
-	UPROPERTY(EditAnywhere, meta = (FoldProperty, ClampMin = 0, EditCondition="Mode != EAKDrawHierarchyMode::WholeHierarchy", EditConditionHides), Category = DrawHierarchy)
+	UPROPERTY(EditAnywhere, meta = (ClampMin = 0, EditCondition="Mode != EAKDrawHierarchyMode::WholeHierarchy", EditConditionHides), Category = DrawHierarchy)
 	int Depth = 0;
-#endif
 
-#if ENABLE_ANIM_DEBUG
-	// Begin FoldProperty Getters
-	[[nodiscard]] EAKDrawHierarchyMode GetMode() const
-		{ return GET_ANIM_NODE_DATA(EAKDrawHierarchyMode, Mode); }
-	[[nodiscard]] EAKDrawHierarchyStyle GetStyle() const
-		{ return GET_ANIM_NODE_DATA(EAKDrawHierarchyStyle, Style); }
-	[[nodiscard]] float GetSize() const
-		{ return GET_ANIM_NODE_DATA(float, Size); }
-	[[nodiscard]] FColor GetColor() const
-		{ return GET_ANIM_NODE_DATA(FColor, Color); }
-	[[nodiscard]] int GetDepth() const
-		{ return GET_ANIM_NODE_DATA(int, Depth); }
-	// End FoldProperty Getters
-	
+#if ENABLE_ANIM_DEBUG	
 	bool bRequestDraw = false;
 	
 protected:
